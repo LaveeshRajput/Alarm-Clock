@@ -5,33 +5,76 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alarm Clock</title>
-    <link rel="stylesheet" href="./style.css">
+
+    
+    <!-- External CSS File -->
+    <link rel="stylesheet" href="clock.css">
 </head>
-<body>
-    <!-- RealTime Clock -->
-    <div id="realtime-clock">
-        <span>12:01:22 AM</span>
+<body onload="initClock()">
+
+    <div class="alarm">
+
+        <div class="datetime">
+            <div class="date">
+                <span id="dayName">Day</span>,
+                <span id="month">Month</span>,
+                <span id="dayNum">00</span>,
+                <span id="year">Year</span>
+            </div>
+            <div class="time">
+                <span id="hour">00</span>:
+                <span id="minutes">00</span>:
+                <span id="seconds">00</span>:
+                <span id="period">AM</span>
+            </div>
+            <button id="stopAlarm" onclick="stopAlarm()">Stop Alarm</button>
+        </div>
+
+        <hr>
+
+        <div class="setAlarm">
+
+            <div class="column">
+                <select>
+                    <option value="setHour" selected hidden>Hour</option>
+                </select>
+            </div>
+
+            <div class="column">
+                <select>
+                    <option value="setMinute" selected hidden>Minute</option>
+                    
+                </select>
+            </div>
+
+            <div class="column">
+                <select>
+                    <option value="AM/PM" selected hidden>AM/PM</option>
+                </select>
+            </div>
+
+            <button id="btn-setAlarm" type="submit">Set Alarm</button>
+            
+        </div>
+
+        <hr>
+
+        <h3 id="alarm-h3"></h3>
+
+        <div class="alarmList">
+                
+            
+        </div>
+
+        
     </div>
 
-    <!-- Alarm Creation unit -->
-    <div id="alarm-input-container">
-        <input type="text" id="alarm-title-input-box" class="alarm-input-group" placeholder="Enter the title here ....">
-        <input type="text" id="alarm-time-input-box" class="alarm-input-group" placeholder="hh:mm:ss am/pm">
-        <button id="alarm-submit-btn" class="alarm-input-group" >create alarm</button>
-    </div>
-
-    <!-- list of alarms -->
-    <ol id="alarm-list"> 
-        <!-- <li>
-            <span class="list-time">00:00:00 AM</span>
-            <span class="list-title">GOTO Sleep</span>
-            <img src="res/trash.svg" alt="delete" class="list-img" data-id="">
-        </li>  -->
-    </ol>
 
 
-    <script src="./script.js"></script>
 
 
+   
+    <!-- External Javascript File -->
+    <script src="clock.js"></script>
 </body>
 </html>
