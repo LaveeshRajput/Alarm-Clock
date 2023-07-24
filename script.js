@@ -1,191 +1,140 @@
-// all alarms will be store in this array in the for of alarm object
-/* 
-Alarm{
-     this.id = id;
-     this.timeoutId = timeoutId;
-     this.time = time;
-     this.title = title;
-}
-*/
-let alarms = [];
-
-
-// grabing important UI Elemets
-const alarmTitleInputBox = document.querySelector('#alarm-title-input-box');
-const alarmTimeInputBox = document.querySelector('#alarm-time-input-box');
-const alarmSubmitBtn = document.querySelector('#alarm-submit-btn');
-const alarmList = document.querySelector('#alarm-list');
-const realtimeClock = document.querySelector('#realtime-clock')
-
-
-// constructor for alarm
-class Alarm {
-    constructor(id, timeoutId, time, title) {
-        this.id = id;
-        this.timeoutId = timeoutId;
-        this.time = time;
-        this.title = title;
-    }
-
-    getTime(){
-        return (new Date(this.time)).toTimeString().slice(0,8);
-    }
-
+*{
+    margin: 0;
+    padding: 0;
 }
 
-
-
-
-// function to showing alerts whenever we need
-function showAlert(message){
-    alert(message);
+body{
+    height: 100vh;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #10101E;
 }
 
-
-
-// creates a list of alarm using array alarms and paints on web-page
-function renderList(){
-
-    alarmList.innerHTML = '';
-
-    for(let i = 0; i<alarms.length; i++){
-        let alarm = alarms[i];
-
-        const li = document.createElement("li");
-        li.innerHTML = `
-            <span class="list-time">${alarm.getTime()}</span>
-            <span class="list-title">${alarm.title}</span>
-            <img src="res/trash.svg" alt="delete" class="list-img" data-id="${alarm.id}">
-        `;
-        alarmList.append(li);
-    }
-
+::-webkit-scrollbar{
+    display: none;
 }
 
-
-// function to validate time if given time is correct it returns object of date else return false and alert error message
-function validateTime(textTime){
-    let hours = Number(textTime.slice(0, 2));
-    let minuts = Number(textTime.slice(3, 5));
-    let seconds = Number(textTime.slice(6, 8));
-    let period = textTime.slice(9, 11);
-
-    if(hours == NaN || hours < 0 || hours > 12 || minuts == NaN || minuts < 0 || minuts > 59 || seconds == NaN || seconds < 0 || seconds > 59 || !(period == 'am' || period == 'pm')){
-        showAlert("wrong time formate \nkeep in mind there is no space between hh:mm:ss\nuse 'am' or 'pm' in small letters");
-        return false;
-    }
-
-    if(period == 'pm'){
-        hours += 12;
-    }
-
-    let alarmDate = new Date();
-    alarmDate.setHours(hours, minuts, seconds, 0);
-
-    if(alarmDate.getTime() - (new Date()) < 0){
-        alarmDate.setDate(alarmDate.getDate() + 1);
-    }
-        return alarmDate;
-//     return (new Date()).setHours(hours, minuts, seconds, 0);
+.alarm{
+    border: 3px solid #2E94E3;
+    border-radius: 8px;
 }
 
+.datetime{
+    color: #fff;
+    background: #10101E;
+    font-family: "Segoe UI", sans-serif;
+    width: 340px;
+    padding: 15px 10px;
+    transition: 0.5s;
+    transition-property: background,box-shadow;
+}
 
+.datetime:hover{
+    background: #2E94E3;
+    box-shadow: 0 0 30px #2E94E3;
+    border-radius: 5px;
+}
 
+.date{
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 3px;
+}
 
-// if time is valid and alarm gets created then we are adding alarm to the alarms array
-function addAlarm(){
+.time{
+    font-size: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    // using current time as ID to alarm
-    let id = (new Date()).getTime();
+.time span:not(:last-child){
+    position: relative;
+    max-width: 0 6px;
+    font-weight: 600;
+    text-align: center;
+}
 
-    let title = alarmTitleInputBox.value;
-    let time = validateTime(alarmTimeInputBox.value).getTime();
-    
+.time span:last-child{
+    background: #2E94E3;
+    font-size: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 10px;
+    padding: 0 5px;
+    border-radius: 3px;
+}
 
-    //resetting Time input fiels
-    alarmTimeInputBox.value = '';
-    alarmTitleInputBox.value = '';
+hr{
+    border: 1px solid #2E94E3;
+    margin: 20px auto;
+}
 
-    // exit adding alarm if validateTime returns false
-    if(!time){
-        return;
-    }
+.setAlarm{
+    display: flex;
+    justify-content: space-around;
+    border-radius: 10px;
+}
 
-    let timeoutId = createAlarm(time - (new Date()).getTime(), title, id);
-
-
-    //creating alarm object and adding it to the array
-    let alarm = new Alarm(id, timeoutId, time, title);
-    alarms.unshift(alarm);
-    renderList();
+.column select{
+    background: #10101E;
+    color: #fff;
+    text-align: center;
+    padding: 8px 4px;
+    border: 1px solid #2E94E3;
+    border-radius: 18px;
 }
 
 
-
-
-// sets timeout function as an alarm 
-function createAlarm(timeInMillisecond, title, id){
-
-    return setTimeout( function() {
-        showAlert(title);
-        deleteAlarm(id);
-    }, timeInMillisecond);
-
-    
+#btn-setAlarm, .btn-delete, #stopAlarm{
+    padding: 5px;
+    color: #fff;
+    background: #2E94E3;
+    border: 1px solid #2E94E3;
+    border-radius: 18px;
 }
 
-
-//removes the alarm from array and clear its timout 
-function deleteAlarm(id){
-    const newAlarms = alarms.filter(function(alarm){
-        if(alarm.id == id){
-            clearTimeout(alarm.timeoutId);
-            return false;
-        }
-
-        return true;
-    });
-
-    alarms = newAlarms;
-    renderList();
+#stopAlarm{
+    visibility: hidden;
+    width: 100px;
+    margin: 0 34%;
 }
 
-
-//return current time in am pm notation
-function getCurrentTime(){
-    return (new Date()).toTimeString().slice(0,8);
+.btn-delete{
+    margin-left: 50px;
 }
 
-
-// maintaining realtime clock using time interval function
-function setRealTimeClock(){
-    let textTime = getCurrentTime();
-    let hours = Number(textTime.slice(0, 2));
-
-    if(hours > 12){
-        hours -= 12;
-        textTime = hours + textTime.slice(2, textTime.length) + ' pm';
-    }else{
-        textTime = textTime + ' am';
-    }
-    realtimeClock.innerHTML = '';
-    let timeSpan = document.createElement("span");
-    timeSpan.innerHTML = textTime;
-
-    realtimeClock.append(timeSpan);
-
+#btn-setAlarm:hover, .btn-delete:hover, #stopAlarm:hover{
+    cursor: pointer;
+    background: #2E94E3;
+    box-shadow: 0 0 30px #2E94E3;
 }
 
-setRealTimeClock();
-let IntervalId = setInterval(setRealTimeClock, 1000);
+h3{
+    color: #fff;
+    font-family: "Segoe UI", sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 3%;
+}
 
+.alarmList{
+    color: #fff;
+    margin: 14px auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
 
-
-// event listner to create alarm activates by alarm submit button
-alarmSubmitBtn.addEventListener('click', addAlarm);
-
-// delete alarm item when we click on delete icon button
-alarmList.addEventListener('click', (e) => {
-    let target = e.target;
-    deleteAlarm(target.dataset.id);
-});
+.alarmLog{
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px auto;
+}
