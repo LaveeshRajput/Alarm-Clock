@@ -6,7 +6,7 @@ const selectMenu = document.querySelectorAll("select");
 const setAlarmBtn = document.querySelector("#btn-setAlarm");
 let alarmCount = 0;
 let alarmTime;
-let ring = new Audio("audio/Alarm-ringtone.mp3");
+let ring = new Audio("C:/Users/GAYATRI COMPUTER DPR/Downloads/files_ringtone.mp3");
 
 
 // Script for Time and Date
@@ -90,7 +90,7 @@ function setAlarm(){
     document.querySelector("#alarm-h3").innerText = "Alarms";
     let time = `${selectMenu[0].value}:${selectMenu[1].value}:00 ${selectMenu[2].value}`;
     if(time.includes("setHour") || time.includes("setMinute") || time.includes("AM/PM")){
-        alert("Please, Select Valide Input");
+        alert("Please Select Valide Input");
     }else{
         alarmCount++;
         document.querySelector(".alarmList").innerHTML += `
