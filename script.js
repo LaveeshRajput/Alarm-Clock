@@ -76,11 +76,6 @@ for(let i=59; i>=0;i--){
     let option = `<option value="${i}">${i}</option>`;
     selectMenu[1].firstElementChild.insertAdjacentHTML("afterend", option);
 }
-for(let i=59; i>=0;i--){
-    i=i<10 ? "0"+i :i;
-    let option = `<option value="${i}">${i}</option>`;
-    selectMenu[2].firstElementChild.insertAdjacentHTML("afterend", option);
-}
 
 for(let i=2; i>0;i--){
     let ampm = i== 1? "AM":"PM";
@@ -93,7 +88,7 @@ for(let i=2; i>0;i--){
 
 function setAlarm(){
     document.querySelector("#alarm-h3").innerText = "Alarms";
-    let time = `${selectMenu[0].value}:${selectMenu[1].value}:00 ${selectMenu[2].value}:00 ${selectMenu[3].value}`;
+    let time = `${selectMenu[0].value}:${selectMenu[1].value}:00 ${selectMenu[2].value}`;
     if(time.includes("setHour") || time.includes("setMinute") || time.includes("AM/PM")){
         alert("Please Select Valide Input");
     }else{
